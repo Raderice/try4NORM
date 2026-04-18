@@ -1,0 +1,12 @@
+{% extends "main/base.html" %}
+{% block content %}
+<h2>Каталог</h2>
+<ul>
+{% for car in cars %}
+<li class="card">
+<img class="photo" src="/static/cars/{{car.id}}.jpg" alt="Фото авто">
+<b>{{car.name}}</b>
+</li>
+{% endfor %}
+</ul>
+{% endblock %}

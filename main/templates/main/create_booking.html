@@ -1,0 +1,26 @@
+{% extends "main/base.html" %}
+{% block content %}
+<h3>Новая заявка</h3>
+<form method="post">{% csrf_token %}
+<select name="car_id" id="car_select" required onchange="showPhoto()">
+<option value="">Автомобиль</option>
+{% for car in cars %}<option value="{{car.id}}">{{car.name}}</option>{% endfor %}
+</select><br>
+<img id="car_photo" class="photo" src="" style="display:none">
+<input type="date" name="booking_date" required><br>
+<button type="submit" class="btn">Забронировать</button>
+<a href="{% url 'my_bookings' %}" class="btn">Отмена</a>
+</form>
+<script>
+function showPhoto() {
+	var sel = document.getElementById('car_select');
+	var img = document.getElementById('car_photo');
+	if(sel.value) {
+		img.src = '/static/cars/' + sel.value + '.jpg';
+		img.style.display = '';
+	} else {
+		img.style.display = 'none';
+	}
+}
+</script>
+{% endblock %}

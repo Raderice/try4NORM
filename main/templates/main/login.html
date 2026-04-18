@@ -1,0 +1,10 @@
+{% extends "main/base.html" %}
+{% block content %}
+<h3>Вход</h3>
+<form method="post">{% csrf_token %}
+<input name="email" placeholder="Email" required><br>
+<input type="password" name="password" placeholder="Пароль" required><br>
+<button type="submit">Войти</button>
+<a href="{% url 'register' %}">Регистрация</a>
+</form>
+{% endblock %}

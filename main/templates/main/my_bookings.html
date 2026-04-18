@@ -1,0 +1,15 @@
+{% extends "main/base.html" %}
+{% block content %}
+<h3>Мои заявки</h3>
+{% if bookings %}
+<ul>
+{% for b in bookings %}
+<li class="card">
+<img class="photo" src="/static/cars/{{b.car.id}}.jpg" alt="Фото авто">
+<b>{{b.car.name}}</b> | {{b.booking_date}} |
+<span class="status status-{{b.status}}">{{b.get_status_display}}</span>
+</li>
+{% endfor %}
+</ul>
+{% else %}Нет заявок. <a href="{% url 'create_booking' %}">Создать</a>{% endif %}
+{% endblock %}
