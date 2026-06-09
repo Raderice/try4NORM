@@ -1,135 +1,193 @@
-# Минимальный сервис бронирования на Django
-
-## Быстрый старт
-
-1. **Создайте проект и приложение**
-   ```bash
-   django-admin startproject try4
-   cd try4
-   python -m venv .venv
-   source .venv/bin/activate
-   pip install django
-   python manage.py startapp main
-   ```
-2. **Добавьте приложение и пользователя**
-   - В `try4/settings.py`:
-     - В `INSTALLED_APPS` добавьте `'main',`
-     - Добавьте строку:
-       ```python
-       AUTH_USER_MODEL = 'main.User'
-       ```
-     - Для статики (фото и т.д.):
-       ```python
-       STATIC_URL = '/static/'
-       STATICFILES_DIRS = [BASE_DIR / 'static']
-       ```
-3. **Создайте модели**
-   - В `main/models.py` опишите:
-     - Кастомную модель пользователя (User)
-     - Модель для бронируемого объекта (например, Car)
-     - Модель Booking (связь пользователя и объекта)
-4. **Зарегистрируйте модели в админке**
-   - В `main/admin.py`:
-     ```python
-     from .models import User, Car, Booking
-     admin.site.register(User)
-     admin.site.register(Car)
-     admin.site.register(Booking)
-     ```
-5. **Создайте и примените миграции**
-   ```bash
-   python manage.py makemigrations
-   python manage.py migrate
-   ```
-6. **Создайте шаблоны**
-   - В `templates/main/` создайте HTML-файлы для каталога, создания заявки, просмотра заявок и т.д.
-   - Используйте минимальный дизайн, добавьте места под фото (например, `<img src="/static/cars/1.jpg">`).
-7. **Реализуйте views и urls**
-   - В `main/views.py` реализуйте регистрацию, вход, создание и просмотр заявок.
-   - В `main/urls.py` настройте маршруты.
-   - В `try4/urls.py`:
-     ```python
-     from django.contrib import admin
-     from django.urls import path, include
-     urlpatterns = [
-         path('admin/', admin.site.urls),
-         path('', include('main.urls')),
-     ]
-     ```
-8. **Добавьте статику**
-   - Положите изображения в `static/cars/` или другую нужную папку.
-9. **Создайте суперпользователя и запустите сервер**
-   ```bash
-   python manage.py createsuperuser
-   python manage.py runserver
-   ```
+# Сервис бронирования на Django — порядок создания проекта
 
 ---
 
-## Как быстро изменить тематику (например, на бронирование билетов)
+## 1. Установка и создание проекта
 
-1. **Модели:**
-   - В `main/models.py` замените модель `Car` на нужную (`Ticket`, `Event`, и т.д.).
-   - В Booking поменяйте поле `car` на нужное (`ticket`, `event`).
-2. **Шаблоны:**
-   - В `templates/main/` замените все упоминания автомобилей на новую сущность (например, "Автомобиль" → "Билет").
-   - Обновите изображения и пути к ним.
-3. **views.py:**
-   - Измените работу с моделями под новую сущность.
-4. **urls.py:**
-   - В `main/urls.py` настройте маршруты под новые страницы.
-   - В `try4/urls.py` ничего менять не нужно, если структура остается прежней.
-5. **settings.py:**
-   - Проверьте, что `'main'` в `INSTALLED_APPS` и `AUTH_USER_MODEL = 'main.User'`.
-   - Для статики: `STATIC_URL` и `STATICFILES_DIRS`.
-6. **Миграции:**
-   - После изменения моделей:
-     ```bash
-     python manage.py makemigrations
-     python manage.py migrate
-     ```
-7. **Админка:**
-   - Зарегистрируйте новые модели в `main/admin.py`.
-8. **Проверьте шаблоны и статику:**
-   - Обновите шаблоны и изображения под новую тематику.
+```bash
+pip install django
+```
+```bash
+django-admin startproject try4 .
+```
+> Точка в конце — проект создаётся в текущей папке, без вложенной директории.
+
+```bash
+python manage.py startapp main
+```
 
 ---
 
-## Пример структуры проекта
+## 2. Настройка settings.py
+
+В файле `try4/settings.py` добавить/изменить:
+
+```python
+AUTH_USER_MODEL = 'main.User'       # кастомная модель пользователя — ОБЯЗАТЕЛЬНО ДО ПЕРВОЙ МИГРАЦИИ
+
+INSTALLED_APPS = [
+    ...
+    'main',                          # подключить приложение
+]
+
+LANGUAGE_CODE = 'ru-ru'             # язык (опционально)
+```
+
+---
+
+## 3. Написать модели — `main/models.py`
+
+Описать классы `User`, `Car`, `Booking` (или другие нужные модели).
+
+---
+
+## 4. Зарегистрировать модели в админке — `main/admin.py`
+
+```python
+from django.contrib import admin
+from .models import User, Car, Booking
+
+admin.site.register(User)
+admin.site.register(Car)
+admin.site.register(Booking)
+```
+
+---
+
+## 5. Написать представления — `main/views.py`
+
+Реализовать функции: `home`, `login`, `logout`, `register`, `my_bookings`, `create_booking`.
+
+---
+
+## 6. Настроить маршруты
+
+**`main/urls.py`** — маршруты приложения:
+```python
+from django.urls import path
+from . import views
+
+urlpatterns = [
+    path('', views.home, name='home'),
+    path('login/', views.login, name='login'),
+    path('logout/', views.logout, name='logout'),
+    path('register/', views.register, name='register'),
+    path('my_bookings/', views.my_bookings, name='my_bookings'),
+    path('create_booking/', views.create_booking, name='create_booking'),
+]
+```
+
+**`try4/urls.py`** — главный роутер проекта:
+```python
+from django.contrib import admin
+from django.urls import path, include
+
+urlpatterns = [
+    path('admin/', admin.site.urls),
+    path('', include('main.urls')),
+]
+```
+
+---
+
+## 7. Создать шаблоны
+
+Папка: `main/templates/main/`
+
+Файлы: `base.html`, `login.html`, `register.html`, `my_bookings.html`, `create_booking.html`
+
+---
+
+## 8. Миграции
+
+```bash
+python manage.py makemigrations
+```
+> Создаёт файлы миграций на основе моделей. Запускать после каждого изменения моделей.
+
+```bash
+python manage.py migrate
+```
+> Применяет миграции к базе данных (создаёт таблицы).
+
+---
+
+## 9. Создать суперпользователя
+
+**Стандартный способ (интерактивный):**
+```bash
+python manage.py createsuperuser
+```
+
+**Быстрый способ через shell (логин: admin@admin.com, пароль: admin):**
+```bash
+python manage.py shell -c "
+from django.contrib.auth import get_user_model
+U = get_user_model()
+U.objects.filter(username='admin').delete()
+U.objects.create_superuser(username='admin', email='admin@admin.com', password='admin', full_name='Admin', phone_number='0000000000', driver_license='0000000000')
+"
+```
+
+---
+
+## 10. Запуск сервера
+
+```bash
+python manage.py runserver
+```
+
+Сервер запустится на `http://127.0.0.1:8000/`
+Админка: `http://127.0.0.1:8000/admin/`
+
+---
+
+## Все команды кратко
+
+| Команда | Когда использовать |
+|---|---|
+| `pip install django` | Один раз перед началом |
+| `django-admin startproject try4 .` | Создать проект |
+| `python manage.py startapp main` | Создать приложение |
+| `python manage.py makemigrations` | После каждого изменения моделей |
+| `python manage.py migrate` | После makemigrations |
+| `python manage.py createsuperuser` | Создать администратора |
+| `python manage.py runserver` | Запустить сервер |
+| `python manage.py check` | Проверить проект на ошибки |
+| `python manage.py shell` | Открыть Python-консоль с Django |
+
+---
+
+## Структура проекта
 
 ```
 project_root/
-├── db.sqlite3
 ├── manage.py
-├── try4/                # настройки проекта
-│   ├── __init__.py
+├── db.sqlite3
+├── try4/
 │   ├── settings.py
 │   ├── urls.py
-│   └── ...
-├── main/                # основное приложение
-│   ├── __init__.py
-│   ├── models.py
-│   ├── views.py
-│   ├── urls.py
-│   ├── admin.py
-│   ├── templates/
-│   │   └── main/
-│   │       ├── base.html
-│   │       ├── catalog.html
-│   │       └── ...
-│   └── migrations/
-├── static/              # папка для статики
-│   └── cars/            # фотографии автомобилей (или другие фото)
-│       ├── 1.jpg
-│       ├── 2.jpg
-│       └── ...
-└── README.md
+│   ├── wsgi.py
+│   └── asgi.py
+└── main/
+    ├── models.py
+    ├── views.py
+    ├── urls.py
+    ├── admin.py
+    ├── migrations/
+    └── templates/
+        └── main/
+            ├── base.html
+            ├── login.html
+            ├── register.html
+            ├── my_bookings.html
+            └── create_booking.html
 ```
-
-- Все фотографии и другие статические файлы должны лежать в папке `static/` на уровне с manage.py.
-- Для фото автомобилей используйте подпапку `static/cars/` (или другую, если меняете тематику).
-- В шаблонах путь к фото будет, например: `<img src="/static/cars/1.jpg">`
 
 ---
 
-Теперь вы можете быстро адаптировать проект под любую похожую задачу: бронирование билетов, комнат, мероприятий и т.д. Просто меняйте модели, шаблоны и логику под свою тему.
+## Важные моменты
+
+- `AUTH_USER_MODEL` нужно добавить в `settings.py` **до первой миграции**, иначе придётся пересоздавать базу.
+- `makemigrations` — только создаёт файлы, `migrate` — применяет их.
+- Если база сломалась: удали `db.sqlite3` и все файлы в `migrations/` кроме `__init__.py`, затем снова `makemigrations` + `migrate`.
