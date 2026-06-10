@@ -1,26 +1,17 @@
-{% extends "main/base.html" %}
-{% block content %}
-<h3>Новая заявка</h3>
-<form method="post">{% csrf_token %}
-<select name="car_id" id="car_select" required onchange="showPhoto()">
-<option value="">Автомобиль</option>
+{% extends "main/base.html" %}{% block title %}Новая заявка — AutoRent{% endblock %}
+{% block content %}<div class="container"><h2>Новая заявка</h2>
+<div class="card"><form method="post">{% csrf_token %}
+<label>Автомобиль</label>
+<select name="car_id" required onchange="updateCarInfo(this.value)">
+<option value="">Выберите автомобиль</option>
 {% for car in cars %}<option value="{{car.id}}">{{car.name}}</option>{% endfor %}
-</select><br>
-<img id="car_photo" class="photo" src="" style="display:none">
-<input type="date" name="booking_date" required><br>
+</select>
+<div id="car-info" class="info-box"><div class="info-price"></div><div class="info-desc"></div></div>
+<label>Дата аренды</label><input type="date" name="booking_date" required>
+<div class="btn-group">
 <button type="submit" class="btn">Забронировать</button>
-<a href="{% url 'my_bookings' %}" class="btn">Отмена</a>
-</form>
-<script>
-function showPhoto() {
-	var sel = document.getElementById('car_select');
-	var img = document.getElementById('car_photo');
-	if(sel.value) {
-		img.src = '/static/cars/' + sel.value + '.jpg';
-		img.style.display = '';
-	} else {
-		img.style.display = 'none';
-	}
-}
-</script>
+<a href="{% url 'my_bookings' %}" class="btn btn-outline">Отмена</a>
+</div>
+</form></div></div>
+<script>window.CAR_DATA={{cars_json|safe}};</script>
 {% endblock %}

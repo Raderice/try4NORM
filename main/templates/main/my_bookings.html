@@ -1,15 +1,15 @@
-{% extends "main/base.html" %}
-{% block content %}
-<h3>Мои заявки</h3>
-{% if bookings %}
-<ul>
-{% for b in bookings %}
-<li class="card">
-<img class="photo" src="/static/cars/{{b.car.id}}.jpg" alt="Фото авто">
-<b>{{b.car.name}}</b> | {{b.booking_date}} |
+{% extends "main/base.html" %}{% load static %}{% block title %}Мои заявки — AutoRent{% endblock %}
+{% block content %}<div class="container">
+<h2>Мои заявки</h2>
+{% for b in bookings %}<div class="card"><div class="card-row">
+<img class="car-img" src="{% static 'main/car.svg' %}" alt="">
+<div style="flex:1"><b>{{b.car.name}}</b>
+<div class="meta">{{b.booking_date}} · {{b.car.price}} руб./сут.</div>
+{% if b.car.description %}<div class="meta">{{b.car.description}}</div>{% endif %}
+<div class="meta" style="font-size:.8rem;color:#94a3b8">{{b.created_at|date:"d.m.Y H:i"}}</div>
 <span class="status status-{{b.status}}">{{b.get_status_display}}</span>
-</li>
+</div></div></div>
+{% empty %}<div class="card"><p class="empty">Нет заявок. <a href="{% url 'create_booking' %}">Создать первую</a></p></div>
 {% endfor %}
-</ul>
-{% else %}Нет заявок. <a href="{% url 'create_booking' %}">Создать</a>{% endif %}
-{% endblock %}
+<a href="{% url 'create_booking' %}" class="btn" style="margin-top:4px">+ Новая заявка</a>
+</div>{% endblock %}

@@ -1,10 +1,10 @@
-{% extends "main/base.html" %}
-{% block content %}
-<h3>Вход</h3>
+{% extends "main/base.html" %}{% block title %}Вход — AutoRent{% endblock %}
+{% block content %}<div class="auth-wrap"><div class="auth-card">
+<h2>Вход</h2>
 <form method="post">{% csrf_token %}
-<input name="email" placeholder="Email" required><br>
-<input type="password" name="password" placeholder="Пароль" required><br>
-<button type="submit">Войти</button>
-<a href="{% url 'register' %}">Регистрация</a>
+<label>Email</label><input type="email" name="email" placeholder="example@mail.ru" required>
+<label>Пароль</label><input type="password" name="password" placeholder="••••••••" required>
+<button type="submit" class="btn" style="width:100%;justify-content:center">Войти</button>
 </form>
-{% endblock %}
+<p class="auth-foot">Нет аккаунта? <a href="{% url 'register' %}">Зарегистрироваться</a></p>
+</div></div>{% endblock %}

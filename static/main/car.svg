@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 50" role="img" aria-label="Автомобиль">
+  <rect x="10" y="24" width="80" height="18" rx="3" fill="#94a3b8"/>
+  <path d="M22 24 L30 12 Q32 9 36 9 L64 9 Q68 9 70 12 L78 24Z" fill="#cbd5e1"/>
+  <rect x="31" y="11" width="16" height="11" rx="2" fill="#7dd3fc" opacity=".9"/>
+  <rect x="53" y="11" width="16" height="11" rx="2" fill="#7dd3fc" opacity=".9"/>
+  <circle cx="26" cy="42" r="7" fill="#334155"/>
+  <circle cx="26" cy="42" r="3" fill="#94a3b8"/>
+  <circle cx="74" cy="42" r="7" fill="#334155"/>
+  <circle cx="74" cy="42" r="3" fill="#94a3b8"/>
+  <rect x="8" y="28" width="9" height="7" rx="1" fill="#fbbf24" opacity=".85"/>
+  <rect x="83" y="28" width="9" height="7" rx="1" fill="#fca5a5" opacity=".85"/>
+  <rect x="10" y="33" width="80" height="4" rx="1" fill="#64748b" opacity=".3"/>
+</svg>
