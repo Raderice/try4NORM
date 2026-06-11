@@ -2,7 +2,7 @@
 {% block content %}<div class="container">
 <h2>Мои заявки</h2>
 {% for b in bookings %}<div class="card"><div class="card-row">
-<img class="car-img" src="{% static 'main/car.svg' %}" alt="">
+{% if b.car.image %}<img class="car-img" src="{{ b.car.image.url }}" alt="">{% endif %}
 <div style="flex:1"><b>{{b.car.name}}</b>
 <div class="meta">{{b.booking_date}} · {{b.car.price}} руб./сут.</div>
 {% if b.car.description %}<div class="meta">{{b.car.description}}</div>{% endif %}

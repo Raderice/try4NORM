@@ -112,7 +112,39 @@ python manage.py migrate
 
 ---
 
-## 9. Создать суперпользователя
+## 9. ER-диаграмма через Django
+
+Установить пакет и системный Graphviz:
+
+```bash
+pip install django-extensions
+pip install graphviz
+```
+
+Скачать и установить Graphviz для Windows: https://graphviz.org/download/  
+(добавить в PATH при установке — поставить галочку «Add to PATH»)
+
+Добавить в `try4/settings.py` в список `INSTALLED_APPS`:
+
+```python
+INSTALLED_APPS = [
+    ...
+    'main',
+    'django_extensions',   # только для генерации диаграммы
+]
+```
+
+Сгенерировать диаграмму:
+
+```bash
+python manage.py graph_models main -o er_diagram.png
+```
+
+Файл `er_diagram.png` появится в корне проекта. После создания диаграммы строку `'django_extensions'` из `INSTALLED_APPS` можно убрать.
+
+---
+
+## 10. Создать суперпользователя
 
 **Стандартный способ (интерактивный):**
 ```bash
@@ -131,7 +163,7 @@ U.objects.create_superuser(username='admin', email='admin@admin.com', password='
 
 ---
 
-## 10. Запуск сервера
+## 11. Запуск сервера
 
 ```bash
 python manage.py runserver
@@ -155,6 +187,8 @@ python manage.py runserver
 | `python manage.py runserver` | Запустить сервер |
 | `python manage.py check` | Проверить проект на ошибки |
 | `python manage.py shell` | Открыть Python-консоль с Django |
+| `pip install django-extensions graphviz` | Для генерации ER-диаграммы |
+| `python manage.py graph_models main -o er_diagram.png` | Создать ER-диаграмму |
 
 ---
 
